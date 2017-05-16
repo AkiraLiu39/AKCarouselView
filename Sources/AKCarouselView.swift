@@ -23,7 +23,7 @@ public class AKCarouselView: UIView,UIScrollViewDelegate {
     public var currentIndex = 0
     public var autoScrollInterval:TimeInterval = 0
     public var pageControlDisplayModel = AKCarouselPageControlDisplayModel.auto
-    weak var pageControl : AKCarouselPageControl?{
+    public weak var pageControl : AKCarouselPageControl?{
         willSet(newView){
             self.pageControl?.removeFromSuperview()
             if (newView != nil) {
@@ -219,8 +219,10 @@ public class AKCarouselView: UIView,UIScrollViewDelegate {
         for i in 0..<startIndex {
             self.removeContentView(i)
         }
-        for i in endIndex+1..<self.contentViewCount {
-            self.removeContentView(i)
+        if self.contentViewCount > 0 {
+            for i in endIndex+1..<self.contentViewCount {
+                self.removeContentView(i)
+            }
         }
         for i in startIndex...endIndex {
             self.addContentView(i)
