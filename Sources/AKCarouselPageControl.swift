@@ -7,17 +7,17 @@
 //
 
 import UIKit
-enum AKCarouselPageControlViewType {
+public enum AKCarouselPageControlViewType {
     case normal
     case selected
 }
-class AKCarouselPageControl: UIView {
-    var indicatorCount = 0{
+public class AKCarouselPageControl: UIView {
+    public var indicatorCount = 0{
         didSet{
             self.setupIndicator(self.indicatorCount)
         }
     }
-    var currentSelectedIndex :Int{
+    public var currentSelectedIndex :Int{
         get{
             return self.selectedIndex
         }
@@ -25,7 +25,7 @@ class AKCarouselPageControl: UIView {
             changeSelectedIndicator(newValue)
         }
     }
-    var onIndicatorClicked : ((_ pageControl: AKCarouselPageControl, _ index:Int, _ indecator:UIView)->Void)?
+    public var onIndicatorClicked : ((_ pageControl: AKCarouselPageControl, _ index:Int, _ indecator:UIView)->Void)?
 
     private var selectedIndex = 0;
     private var indicatorHorizonMargin:CGFloat = 0
@@ -36,7 +36,7 @@ class AKCarouselPageControl: UIView {
     private var adjustFrameClosures:((_ superViewBounds:CGRect,_ selfFitSize:CGSize)->CGRect)!
     private var indicatorViewProvider:((_ pageControl: AKCarouselPageControl, _ viewType: AKCarouselPageControlViewType)->UIView)!
 
-    init(
+    public init(
         indicatorProvider:@escaping ((_ pageControl: AKCarouselPageControl, _ viewType: AKCarouselPageControlViewType)->UIView)
         ,adjustFrameInSuperView:@escaping ((_ superViewBounds:CGRect,_ selfFitSize:CGSize)->CGRect)
         ,indicatorSize:CGSize
@@ -50,11 +50,11 @@ class AKCarouselPageControl: UIView {
         self.addGestureRecognizer(tap)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         var indicatorX:CGFloat = 0;
         for indicator in self.subviews {
@@ -67,7 +67,7 @@ class AKCarouselPageControl: UIView {
         self.selectedIndicator.frame = self.indicatorReference[self.currentSelectedIndex]?.frame ?? CGRect.zero
     }
 
-    func fitFrameInSuperView(_ superViewBounds:CGRect) -> CGRect {
+    public func fitFrameInSuperView(_ superViewBounds:CGRect) -> CGRect {
         let normalIndicatorCount =  max((self.subviews.count - 1), 0);
         let marginCount = max((normalIndicatorCount - 1), 0)
         let fitWidth = (self.indicatorSize.width * CGFloat(normalIndicatorCount) + self.indicatorHorizonMargin * CGFloat(marginCount))

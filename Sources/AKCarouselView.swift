@@ -7,7 +7,7 @@
 //
 
 import UIKit
-enum AKCarouselPageControlDisplayModel {
+public enum AKCarouselPageControlDisplayModel {
     //this is defualt.if datasource.count > 1 show pageControl,else hidden
     case auto
     case alwaysShow
@@ -16,13 +16,13 @@ enum AKCarouselPageControlDisplayModel {
 
 
 //MARK:-
-class AKCarouselView: UIView,UIScrollViewDelegate {
-    var contentScale:CGFloat = 1
-    var contentHorizonelMargin : CGFloat = 0
-    var contentSize:CGSize?
-    var currentIndex = 0
-    var autoScrollInterval:TimeInterval = 0
-    var pageControlDisplayModel = AKCarouselPageControlDisplayModel.auto
+public class AKCarouselView: UIView,UIScrollViewDelegate {
+    public var contentScale:CGFloat = 1
+    public var contentHorizonelMargin : CGFloat = 0
+    public var contentSize:CGSize?
+    public var currentIndex = 0
+    public var autoScrollInterval:TimeInterval = 0
+    public var pageControlDisplayModel = AKCarouselPageControlDisplayModel.auto
     weak var pageControl : AKCarouselPageControl?{
         willSet(newView){
             self.pageControl?.removeFromSuperview()
@@ -31,7 +31,7 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
             }
         }
     }
-    weak var extraView : UIView?{
+    public weak var extraView : UIView?{
         willSet(newView){
             self.extraView?.removeFromSuperview()
             if let newView = newView{
@@ -40,12 +40,12 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
         }
     }
 
-    var dataSourceProvider : ((AKCarouselView) -> [AnyObject])!
-    var contentViewProvider : ((AKCarouselView, Int) -> UIView)!
+    public var dataSourceProvider : ((AKCarouselView) -> [AnyObject])!
+    public var contentViewProvider : ((AKCarouselView, Int) -> UIView)!
 
-    var onContentViewSelected : ((_: AKCarouselView, _:Int, _:UIView)->Void)?
-    var onContentViewIndexChange : ((AKCarouselView, Int) -> Void)?
-    var resizeExtraView:((AKCarouselView,UIView) -> Void)?
+    public var onContentViewSelected : ((_: AKCarouselView, _:Int, _:UIView)->Void)?
+    public var onContentViewIndexChange : ((AKCarouselView, Int) -> Void)?
+    public var resizeExtraView:((AKCarouselView,UIView) -> Void)?
 
     private var contentViewWidth:CGFloat{
         get{
@@ -68,7 +68,7 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
 
     //MARK:overwite
 
-    init(frame: CGRect
+    public init(frame: CGRect
         ,contentViewSize:CGSize? = nil
         ,dataSourceProvider:@escaping ((_: AKCarouselView) -> [AnyObject])
         ,contentViewProvider:@escaping ((_: AKCarouselView, _:Int) -> UIView)) {
@@ -79,12 +79,12 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
         self.contentViewProvider = contentViewProvider
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
 
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    override public func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
         if view == self{
             return self.scrollView
@@ -93,7 +93,7 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
         }
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         let oldScrollViewFrame = self.scrollView.frame;
         self.layoutScrollView()
@@ -110,7 +110,7 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
 
     }
 
-    override func willMove(toSuperview newSuperview: UIView?) {
+    override public func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         if (newSuperview == nil) {
             self.stopAutoScroll()
@@ -283,7 +283,7 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
 
 
     //MARK:public methods
-    func scrollTo(_ index:Int) {
+    public  func scrollTo(_ index:Int) {
         if (index < self.contentViewCount) {
             self.stopAutoScroll()
             self.autoScrollIndex = index + self.originalViewCount;
@@ -294,7 +294,7 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
         }
     }
 
-    func reloadData() {
+   public func reloadData() {
         self.stopAutoScroll()
         for subView in self.scrollView.subviews {
             subView.removeFromSuperview()
@@ -331,12 +331,12 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
 
     }
 
-    func dequeueReuseView() -> UIView? {
+    public func dequeueReuseView() -> UIView? {
         return self.reuseableContentViews.popLast()
     }
 
     //MARK: scrollViewDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (self.originalViewCount < 2) {return}
         let contentWidth = self.contentViewWidth
         let offsetIndex = scrollView.contentOffset.x / contentWidth
@@ -360,11 +360,11 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
         }
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.stopAutoScroll()
     }
 
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if (self.originalViewCount > 1 && self.autoScrollInterval > 0) {
             self.startAutoScroll()
             let contentWidth = self.contentViewWidth
