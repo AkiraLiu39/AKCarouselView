@@ -54,6 +54,9 @@ class ViewController: UIViewController {
         }
         carouselView.onContentViewIndexChange = {carouselView,index in
             print("onViewIndexChange is \(index)")
+            if let lebel =  carouselView.extraView as? UILabel{
+                lebel.text = "current index is \(index)"
+            }
         }
         //1即为 不缩放
         carouselView.contentScale = 0.8
@@ -62,6 +65,13 @@ class ViewController: UIViewController {
         //没有contentSize 即全
         carouselView.contentSize = CGSize(width: 100, height: 100)
         carouselView.pageControl = carouselPage
+        carouselView.extraView = UILabel()
+        carouselView.resizeExtraView = {(carouselView,extralView) in
+            let maxX = carouselView.pageControl?.frame.minX ?? 0
+            let height = carouselView.pageControl?.frame.height ?? 0
+            
+            extralView.frame = CGRect(x: 0, y: carouselView.frame.height - height, width: maxX, height:height)
+        }
         self.view .addSubview(carouselView)
         self.carouselView = carouselView;
 

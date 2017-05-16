@@ -31,12 +31,21 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
             }
         }
     }
+    weak var extraView : UIView?{
+        willSet(newView){
+            self.extraView?.removeFromSuperview()
+            if let newView = newView{
+                self.addSubview(newView)
+            }
+        }
+    }
 
     var dataSourceProvider : ((AKCarouselView) -> [AnyObject])!
     var contentViewProvider : ((AKCarouselView, Int) -> UIView)!
 
     var onContentViewSelected : ((_: AKCarouselView, _:Int, _:UIView)->Void)?
     var onContentViewIndexChange : ((AKCarouselView, Int) -> Void)?
+    var resizeExtraView:((AKCarouselView,UIView) -> Void)?
 
     private var contentViewWidth:CGFloat{
         get{
@@ -94,6 +103,9 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
 
         if let pageControl = self.pageControl {
             pageControl.frame = pageControl.fitFrameInSuperView(self.bounds)
+        }
+        if let extraView = self.extraView,let resizeBlock = self.resizeExtraView{
+            resizeBlock(self,extraView)
         }
 
     }
@@ -312,6 +324,9 @@ class AKCarouselView: UIView,UIScrollViewDelegate {
         self.autoScrollIndex = self.originalViewCount
         self.setContentView(offset: self.scrollView.contentOffset)
         self.refreshVisiblePageAppearance()
+        if let onContentViewIndexChange = self.onContentViewIndexChange , self.originalViewCount > 0 {
+            onContentViewIndexChange(self,0)
+        }
         self.startAutoScroll()
 
     }
