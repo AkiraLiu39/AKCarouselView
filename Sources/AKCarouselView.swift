@@ -325,6 +325,7 @@ public class AKCarouselView: UIView,UIScrollViewDelegate {
         }
         self.autoScrollIndex = self.originalViewCount
         self.setContentView(offset: self.scrollView.contentOffset)
+        self.layoutSubviews()
         self.refreshVisiblePageAppearance()
         if let onContentViewIndexChange = self.onContentViewIndexChange , self.originalViewCount > 0 {
             onContentViewIndexChange(self,0)
